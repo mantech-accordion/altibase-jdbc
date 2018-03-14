@@ -28,8 +28,15 @@
 
       <div class="row">
         <div class="col-md-12 order-md-1">
-          <h4 class="mb-3">ALITBASE JDBC TEST</h4>
-          <form class="needs-validation" id="form" role="form" data-toggle="validator"><!-- novalidate -->
+          <form class="needs-validation" id="form" name="form" role="form" method="post" action="monitoring" data-toggle="validator"><!-- novalidate -->
+        	<div class="row">
+	        	<div class="col-md-6">
+	          		<h4 class="mb-3">ALITBASE JDBC TEST</h4>
+	          	</div>
+	        	<div class="col-md-6">
+	        	  	<button type="button" class="btn btn-outline-primary" id="monitoringBtn" style="float: right;">Monitoring</button>
+	          	</div>
+          	</div>
             <div class="mb-3">
                 <label for="crud">CRUD</label>
                 <select class="custom-select d-block w-100" id="crud" name="crud" required>
@@ -94,7 +101,7 @@
             
             <div class="mb-3">
               <label for="sql">SQL</label>
-              <input type="text" class="form-control" id="sql" name="sql" placeholder="" value="select * from test" required>
+              <textarea class="form-control" id="sql" name="sql" placeholder="" rows="5" required>select * from test</textarea>
               <div class="invalid-feedback">
                 	SQL을 입력하세요.
               </div>
@@ -104,11 +111,8 @@
             <hr class="mb-4">
             
           </form>
-            <label for="result">Result</label>
+            <label for="result">Result (limit to 10rows)</label>
             <div class="mb-3" style="overflow-y: hidden;overflow-x: auto;background-color: white;">
-              <!-- <textarea rows="" cols="" class="form-control"></textarea> -->
-              <%-- <div class="well" id="result" name="result">${result}
-              </div> --%>
 			  <div  id="result" style="min-height: 300px;">
 			  </div>
             </div>
@@ -121,9 +125,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./resources/js/jquery-1.8.0.min.js" ></script>
-    <!-- <script src="../../../../assets/js/vendor/popper.min.js"></script> -->
     <script src="./resources/js/bootstrap.min.js"></script>
-    <!-- <script src="../../../../assets/js/vendor/holder.min.js"></script> -->
     <script>
        $(function() {
     	   $(document).on('change', '#crud', function(){
@@ -134,19 +136,28 @@
     		   } else {
     			   sql = 'insert into test(K01) values(1)';
     		   }
-   			   $('#sql').val(sql);
+   			   $('#sql').text(sql);
+    	   });
+    	   
+    	   
+    	  $(document).on('click', '#monitoringBtn', function(){
+    		  	var serverIp = $('#serverIp').val();
+		        var serverPort = $('#serverPort').val();
+		        var id = $('#id').val();
+		        var password = $('#password').val();
+		        
+	        	if(!validator()){
+	        		if ((serverIp == null || serverIp == '') || (serverPort == null || serverPort == '') ||
+	        			(id == null || id == '') || (password == null || password == '')) {
+	        			return;
+	        		}
+	        	}
+		       $('#form').submit(); 
+	        	
     	   });
 	        $(document).on('click', '#executeBtn', function(){
-	        	var form = document.getElementById("form");
-	        	var validate = form.checkValidity();
-	        	if (validate === false) {
-	                event.preventDefault();
-	                event.stopPropagation();
-	               // return;
-	            }
-	        	form.classList.add('was-validated');
 	        	
-	        	if(validate == false ) {
+	        	if(!validator()){
 	        		return;
 	        	}
 	        	
@@ -203,7 +214,7 @@
 				        		});
 			        		} else {
 			        			html += '		<tr>';
-			        			html += '		<td colspan="'+colums.length+'" style="text-align: center;">검색된 데이터가 없습니다.</td>';
+			        			html += '		<td colspan="'+colums.length+'" style="text-align: center;">검색 결과가 없습니다.</td>';
 				        		html += '		</tr>';
 			        		}
 			        		html += ' </tbody>';
@@ -220,6 +231,27 @@
 		        });
 	        }); 
       }); 
+       function validator(){
+    	   var isValid = false;
+    	   var form = document.getElementById("form");
+	       	var validate = form.checkValidity();
+	       	
+	       	var jdbcDriver = $('#jdbcDriver').val();
+	        var schema = $('#schema').val();
+	        var sql = $('#sql').val();
+	        
+	       	if (validate === false) {
+	               event.preventDefault();
+	               event.stopPropagation();
+	              // return;
+	           }
+	       	form.classList.add('was-validated');
+	       	
+	       	if(validate == false ) {
+	       		return isValid;
+	       	}
+	       	return !isValid;
+       }
     </script>
   </body>
 </html>
