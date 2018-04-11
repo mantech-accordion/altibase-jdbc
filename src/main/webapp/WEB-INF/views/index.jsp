@@ -51,14 +51,14 @@
             <div class="row">
               <div class="col-md-6 mb-3">
 				<label for="serverIp">Server IP</label>
-	            <input type="text" class="form-control" id="serverIp" name="serverIp" placeholder="" value="10.20.200.201" required>
+	            <input type="text" class="form-control" id="serverIp" name="serverIp" placeholder="" value="master" required>
 	            <div class="invalid-feedback">
 	             	Server IP를 입력하세요.
 	            </div>
               </div>
               <div class="col-md-6 mb-3">
 				<label for="serverPort">Server Port</label>
-              	<input type="text" class="form-control" id="serverPort" name="serverPort" placeholder=""  value="31001" required>
+              	<input type="text" class="form-control" id="serverPort" name="serverPort" placeholder=""  value="20001" required>
               	<div class="invalid-feedback">
                 	Server Port를 입력하세요.
               	</div>
